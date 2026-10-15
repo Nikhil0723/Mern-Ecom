@@ -96,7 +96,6 @@ const ApiInspector = () => {
         };
     }, [requests]);
 
-    if (!import.meta.env.DEV) return null;
 
     const selectRequest = (request) => {
         setSelectedId(request.id);
@@ -252,8 +251,8 @@ const ApiInspector = () => {
                                                 key={request.id}
                                                 onClick={() => selectRequest(request)}
                                                 className={`w-full rounded-xl border p-3 text-left transition ${selectedRequest?.id === request.id
-                                                        ? "border-blue-300 bg-blue-50/70 ring-1 ring-blue-100"
-                                                        : "border-slate-200 hover:bg-slate-50"
+                                                    ? "border-blue-300 bg-blue-50/70 ring-1 ring-blue-100"
+                                                    : "border-slate-200 hover:bg-slate-50"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between gap-2">
@@ -324,8 +323,8 @@ const ApiInspector = () => {
                                                     key={value}
                                                     onClick={() => setDetailTab(value)}
                                                     className={`border-b-2 px-3 py-2.5 text-xs font-medium ${detailTab === value
-                                                            ? "border-blue-600 text-blue-700"
-                                                            : "border-transparent text-muted-foreground hover:text-slate-900"
+                                                        ? "border-blue-600 text-blue-700"
+                                                        : "border-transparent text-muted-foreground hover:text-slate-900"
                                                         }`}
                                                 >
                                                     {label}
