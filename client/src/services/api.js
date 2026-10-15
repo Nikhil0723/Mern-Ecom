@@ -1,4 +1,3 @@
-// src/services/api.js
 
 import axios from "axios";
 import { finishRequest, startRequest } from "@/lib/apiInspector";
@@ -26,9 +25,8 @@ api.interceptors.request.use(
       }
     }
 
-    if (import.meta.env.DEV) {
-      config.__inspector = startRequest(config);
-    }
+    // Record requests in development and production.
+    config.__inspector = startRequest(config);
 
     return config;
   },
@@ -37,9 +35,15 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    if (import.meta.env.DEV && response.config.__inspector) {
-      const { id, startedAt } = response.config.__inspector;
-      finishRequest(id, startedAt, response, null);
+    const inspector = response.config.__inspector;
+
+    if (inspector) {
+      finishRequest(
+        inspector.id,
+        inspector.startedAt,
+        response,
+        null
+      );
     }
 
     return response;
@@ -47,8 +51,13 @@ api.interceptors.response.use(
   (error) => {
     const inspector = error.config?.__inspector;
 
-    if (import.meta.env.DEV && inspector) {
-      finishRequest(inspector.id, inspector.startedAt, null, error);
+    if (inspector) {
+      finishRequest(
+        inspector.id,
+        inspector.startedAt,
+        null,
+        error
+      );
     }
 
     return Promise.reject(error);
