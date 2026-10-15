@@ -1,0 +1,205 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+
+/* Light, clean Google-inspired theme */
+:root {
+    color-scheme: light;
+
+    --background: #ffffff;
+    --foreground: #202124;
+
+    --card: #ffffff;
+    --card-foreground: #202124;
+
+    --popover: #ffffff;
+    --popover-foreground: #202124;
+
+    --primary: #1a73e8;
+    --primary-foreground: #ffffff;
+
+    --secondary: #f1f3f4;
+    --secondary-foreground: #3c4043;
+
+    --muted: #f8f9fa;
+    --muted-foreground: #5f6368;
+
+    --accent: #e8f0fe;
+    --accent-foreground: #174ea6;
+
+    --destructive: #d93025;
+    --destructive-foreground: #ffffff;
+
+    --border: #dadce0;
+    --input: #dadce0;
+    --ring: #4285f4;
+
+    --radius: 0.75rem;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Base styles */
+* {
+    border-color: var(--border);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Selection */
+::selection {
+    background: #d2e3fc;
+    color: #174ea6;
+}
+
+/* Smooth interactions */
+button,
+a,
+input,
+textarea,
+select,
+[role="checkbox"],
+[role="radio"] {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+    color: var(--foreground);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #80868b;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px rgb(66 133 244 / 14%);
+}
+
+/* Clean scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #dadce0 transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #dadce0;
+    border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #bdc1c6;
+}
+
+/* Subtle card hover utility */
+.soft-card {
+    border: 1px solid #e8eaed;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgb(60 64 67 / 6%);
+    transition:
+        box-shadow 180ms ease,
+        border-color 180ms ease,
+        transform 180ms ease;
+}
+
+.soft-card:hover {
+    border-color: #dadce0;
+    box-shadow: 0 4px 12px rgb(60 64 67 / 10%);
+}
+
+/* Gentle entrance animation */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 240ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
