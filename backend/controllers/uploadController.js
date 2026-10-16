@@ -4,7 +4,7 @@ const uploadBufferToCloudinary = (buffer) =>
   new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: 'shoply/products',
+        folder: 'UrbanNest/products',
         resource_type: 'image',
       },
       (error, result) => {

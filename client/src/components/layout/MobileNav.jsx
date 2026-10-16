@@ -40,7 +40,7 @@ const MobileNav = () => {
                 <SheetContent side="left" className="w-[280px] sm:w-[320px]">
                     <SheetHeader>
                         <SheetTitle className="text-left text-xl font-bold">
-                            SHOPLY
+                            UrbanNest
                         </SheetTitle>
                     </SheetHeader>
 

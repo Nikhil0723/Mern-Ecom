@@ -56,7 +56,7 @@ const FALLBACK_PRODUCTS = [
         _id: "fallback-product-1",
         name: "Everyday Essentials",
         image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
-        brand: "Shoply",
+        brand: "UrbanNest",
         category: "Featured",
         description: "Discover our everyday essentials.",
         price: 1999,
@@ -69,7 +69,7 @@ const FALLBACK_PRODUCTS = [
         _id: "fallback-product-2",
         name: "Premium Lifestyle",
         image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
-        brand: "Shoply",
+        brand: "UrbanNest",
         category: "Featured",
         description: "Premium products selected for you.",
         price: 2999,
@@ -82,7 +82,7 @@ const FALLBACK_PRODUCTS = [
         _id: "fallback-product-3",
         name: "Modern Collection",
         image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80",
-        brand: "Shoply",
+        brand: "UrbanNest",
         category: "Featured",
         description: "Modern products for modern lifestyles.",
         price: 2499,
@@ -95,7 +95,7 @@ const FALLBACK_PRODUCTS = [
         _id: "fallback-product-4",
         name: "Daily Comfort",
         image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=800&q=80",
-        brand: "Shoply",
+        brand: "UrbanNest",
         category: "Featured",
         description: "Simple products made for everyday life.",
         price: 1799,
@@ -411,7 +411,7 @@ const Home = () => {
                                 {showingLatestFallback && (
                                     <div className="mb-6 text-center">
                                         <Badge variant="secondary">
-                                            Shoply collection
+                                            UrbanNest collection
                                         </Badge>
 
                                         <p className="mt-2 text-sm text-muted-foreground">

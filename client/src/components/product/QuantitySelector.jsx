@@ -2,12 +2,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 
-import {
-    MinusSignIcon,
-    PlusSignIcon,
-} from "@hugeicons/core-free-icons";
-
-import { HugeiconsIcon } from "@hugeicons/react";
+import { LuMinus, LuPlus } from "react-icons/lu";
 
 const QuantitySelector = ({
     quantity,
@@ -30,7 +25,7 @@ const QuantitySelector = ({
                 onClick={onDecrease}
                 aria-label="Decrease quantity"
             >
-                <HugeiconsIcon icon={MinusSignIcon} size={18} />
+                <LuMinus />
             </Button>
 
             <span className="flex h-full min-w-12 items-center justify-center border-x px-3 text-sm font-medium">
@@ -46,7 +41,7 @@ const QuantitySelector = ({
                 onClick={onIncrease}
                 aria-label="Increase quantity"
             >
-                <HugeiconsIcon icon={PlusSignIcon} size={18} />
+                <LuPlus />
             </Button>
         </div>
     );

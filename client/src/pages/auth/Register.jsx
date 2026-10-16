@@ -43,7 +43,7 @@ const Register = () => {
     return (
         <AuthLayout
             title="Create your account"
-            description="Join SHOPLY and start shopping today"
+            description="Join UrbanNest and start shopping today"
         >  {error && (
             <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                 {error}

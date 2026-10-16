@@ -50,7 +50,7 @@ router.post(
           const uploadStream =
             cloudinary.uploader.upload_stream(
               {
-                folder: 'shoply/products',
+                folder: 'UrbanNest/products',
                 resource_type: 'image',
               },
               (error, result) => {

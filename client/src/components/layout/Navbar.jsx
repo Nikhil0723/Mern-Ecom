@@ -82,7 +82,7 @@ const Navbar = () => {
                         to="/"
                         className="shrink-0 text-2xl font-bold tracking-tight"
                     >
-                        SHOPLY
+                        UrbanNest
                     </Link>
 
                     {/* Desktop Navigation */}

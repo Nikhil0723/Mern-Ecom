@@ -68,7 +68,7 @@ const RegisterForm = ({ onSubmit, loading = false }) => {
                 <CardTitle>Create your account</CardTitle>
 
                 <CardDescription>
-                    Join SHOPLY and start shopping today.
+                    Join UrbanNest and start shopping today.
                 </CardDescription>
             </CardHeader>
 

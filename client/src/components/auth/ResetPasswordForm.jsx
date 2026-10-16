@@ -55,7 +55,7 @@ const ResetPasswordForm = ({ onSubmit, loading = false }) => {
                 <CardTitle>Set a new password</CardTitle>
 
                 <CardDescription>
-                    Choose a new password for your SHOPLY account.
+                    Choose a new password for your UrbanNest account.
                 </CardDescription>
             </CardHeader>
 

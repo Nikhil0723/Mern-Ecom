@@ -16,7 +16,7 @@ import { getActiveOffers } from "../../services/offerApi";
 
 const FALLBACK_OFFER = {
     title: "Discover something new",
-    subtitle: "Welcome to Shoply",
+    subtitle: "Welcome to UrbanNest",
     description:
         "Explore our latest products and find something you'll love.",
     image:
@@ -158,7 +158,7 @@ const HomeOfferBanner = () => {
                                     to={
                                         currentOffer.buttonLink ||
                                         "/shop"
-                                    } 
+                                    }
                                     className="flex gap-1"
                                 >
                                     {currentOffer.buttonText ||
@@ -230,8 +230,8 @@ const HomeOfferBanner = () => {
                                 aria-label={`Go to offer ${index + 1
                                     }`}
                                 className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                        ? "w-8 bg-white"
-                                        : "w-2 bg-white/50 hover:bg-white/80"
+                                    ? "w-8 bg-white"
+                                    : "w-2 bg-white/50 hover:bg-white/80"
                                     }`}
                             />
                         ))}

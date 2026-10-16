@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MERN E-Commerce Project Summary</title>
+  <style>
+    @page { size: A4; margin: 16mm 15mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+      color: #1f2937;
+      font-size: 11pt;
+      line-height: 1.42;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 { font-size: 20pt; margin: 0 0 4px; }
+    h2 {
+      font-size: 13.5pt;
+      margin: 18px 0 8px;
+      padding-bottom: 3px;
+      border-bottom: 2px solid #4f46e5;
+      color: #312e81;
+    }
+    h3 { font-size: 11.5pt; margin: 12px 0 6px; color: #1e1b4b; }
+    p, li { margin: 0 0 7px; }
+    table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 10.2pt; }
+    th, td { border: 1px solid #d1d5db; padding: 5px 7px; text-align: left; vertical-align: top; }
+    th { background: #eef2ff; color: #312e81; }
+    .mono { font-family: Consolas, "Courier New", monospace; font-size: 9.5pt; }
+    .cover { background: #312e81; color: #fff; padding: 20px 22px; margin: -20px -20px 16px; }
+    .cover h1, .cover p { color: #fff; }
+    .cover p { margin: 3px 0 0; opacity: 0.92; }
+    ul, ol { margin: 0 0 8px 18px; padding: 0; }
+    .note { background: #f8fafc; border-left: 4px solid #4f46e5; padding: 8px 11px; margin: 8px 0; }
+    .tree {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9pt;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      white-space: pre;
+      line-height: 1.32;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>MERN E-Commerce Project — Summary</h1>
+    <p>Full-stack store: MongoDB, Express, React (Vite), Node.js</p>
+    <p>Current UI lives in <span class="mono">client/</span> · API in <span class="mono">backend/</span></p>
+    <p>Document date: 15 October 2026</p>
+  </div>
+
+  <h2>1. What this project is</h2>
+  <p>
+    An online shop where customers browse products, search and filter, save a wishlist, use coupons,
+    check out with shipping, and pay with <strong>Cash on Delivery</strong> or <strong>Razorpay</strong>.
+    Admins run a panel for products, categories, orders, users, homepage offers, and coupons.
+  </p>
+  <p>
+    The React app uses Vite, Tailwind, shadcn/ui, Redux Toolkit, and React Router.
+    The API uses Express, Mongoose, JWT, Cloudinary for images, and Razorpay for cards/UPI.
+  </p>
+
+  <h2>2. What people can do</h2>
+  <h3>Shoppers (guest)</h3>
+  <ul>
+    <li>Home: offer banners, categories, featured and latest products.</li>
+    <li>Shop: search, category filter, sort, pagination; product cards with wishlist and add-to-cart.</li>
+    <li>Product page: gallery, price, stock, quantity, reviews, add to cart / wishlist.</li>
+    <li>Cart: quantities, remove items, apply coupon, proceed to checkout (login required).</li>
+  </ul>
+  <h3>Logged-in customers</h3>
+  <ul>
+    <li>Register, login, forgot/reset password; edit profile (name, email, password).</li>
+    <li>Save a shipping address; wishlist; view order history and a single order.</li>
+    <li>Checkout: shipping → payment method (COD or Razorpay) → review/place order → pay if online.</li>
+  </ul>
+  <h3>Admins</h3>
+  <ul>
+    <li>Dashboard counts (products, orders, users).</li>
+    <li>CRUD products (image upload to Cloudinary), categories, offers/banners, coupons.</li>
+    <li>List users and delete them; list orders, open details, mark delivered.</li>
+  </ul>
+
+  <h2>3. All pages and routes</h2>
+
+  <h3>Public store</h3>
+  <table>
+    <tr><th>Route</th><th>Page</th><th>What it does</th></tr>
+    <tr><td class="mono">/</td><td>Home</td><td>Banners, categories, featured/latest products, shop CTA.</td></tr>
+    <tr><td class="mono">/shop</td><td>Shop</td><td>Catalog with search, filters, sort, pagination.</td></tr>
+    <tr><td class="mono">/product/:id</td><td>Product details</td><td>Full product, reviews, cart and wishlist actions.</td></tr>
+    <tr><td class="mono">/cart</td><td>Cart</td><td>Line items, coupon, totals, checkout.</td></tr>
+  </table>
+
+  <h3>Auth (logged-out users only)</h3>
+  <table>
+    <tr><th>Route</th><th>Page</th><th>What it does</th></tr>
+    <tr><td class="mono">/login</td><td>Login</td><td>Email/password sign-in.</td></tr>
+    <tr><td class="mono">/register</td><td>Register</td><td>Create account.</td></tr>
+    <tr><td class="mono">/forgot-password</td><td>Forgot password</td><td>Request a reset.</td></tr>
+    <tr><td class="mono">/reset-password</td><td>Reset password</td><td>Set a new password from the reset link.</td></tr>
+  </table>
+
+  <h3>Account &amp; checkout (must be logged in)</h3>
+  <table>
+    <tr><th>Route</th><th>Page</th><th>What it does</th></tr>
+    <tr><td class="mono">/account</td><td>Overview</td><td>Welcome, shortcuts to profile, orders, wishlist.</td></tr>
+    <tr><td class="mono">/account/profile</td><td>Profile</td><td>Update name, email, password.</td></tr>
+    <tr><td class="mono">/account/address</td><td>Address</td><td>Save, edit, or remove shipping address.</td></tr>
+    <tr><td class="mono">/account/wishlist</td><td>Wishlist</td><td>Saved products; add to cart.</td></tr>
+    <tr><td class="mono">/shipping</td><td>Shipping</td><td>Checkout step 1: delivery address.</td></tr>
+    <tr><td class="mono">/payment</td><td>Payment</td><td>Checkout step 2: COD or Razorpay.</td></tr>
+    <tr><td class="mono">/placeorder</td><td>Place order</td><td>Checkout step 3: review, coupon, create order, pay.</td></tr>
+    <tr><td class="mono">/orders</td><td>My orders</td><td>List of the user’s orders.</td></tr>
+    <tr><td class="mono">/order/:id</td><td>Order details</td><td>Items, address, paid/delivered, pay if unpaid.</td></tr>
+  </table>
+
+  <h3>Admin panel (admin users only)</h3>
+  <table>
+    <tr><th>Route</th><th>Page</th><th>What it does</th></tr>
+    <tr><td class="mono">/admin</td><td>Dashboard</td><td>Counts and recent activity snapshot.</td></tr>
+    <tr><td class="mono">/admin/products</td><td>Products</td><td>Search catalog; edit or delete.</td></tr>
+    <tr><td class="mono">/admin/products/new</td><td>Create product</td><td>Name, price, brand, category, stock, image, description.</td></tr>
+    <tr><td class="mono">/admin/products/:id/edit</td><td>Edit product</td><td>Update the same fields.</td></tr>
+    <tr><td class="mono">/admin/orders</td><td>Orders</td><td>All store orders; open one.</td></tr>
+    <tr><td class="mono">/admin/orders/:id</td><td>Order details</td><td>Customer, items, payment; mark delivered.</td></tr>
+    <tr><td class="mono">/admin/users</td><td>Users</td><td>List accounts; delete a user.</td></tr>
+    <tr><td class="mono">/admin/categories</td><td>Categories</td><td>Create, edit, delete shop categories.</td></tr>
+    <tr><td class="mono">/admin/offers</td><td>Offers</td><td>Homepage banners; toggle active; edit/delete.</td></tr>
+    <tr><td class="mono">/admin/offers/new</td><td>Create offer</td><td>Title, text, image, button, dates, active flag.</td></tr>
+    <tr><td class="mono">/admin/offers/:id/edit</td><td>Edit offer</td><td>Update a banner.</td></tr>
+    <tr><td class="mono">/admin/coupons</td><td>Coupons</td><td>Discount codes; edit/delete.</td></tr>
+    <tr><td class="mono">/admin/coupons/new</td><td>Create coupon</td><td>Code, type, value, limits, dates.</td></tr>
+    <tr><td class="mono">/admin/coupons/:id/edit</td><td>Edit coupon</td><td>Update a coupon.</td></tr>
+  </table>
+
+  <h2>4. Checkout flow</h2>
+  <p>
+    Cart → Login (if needed) → Shipping → Payment method → Place order
+    → Razorpay (if online) or wait for COD → Order details.
+    Cart is in Redux/localStorage; coupons are checked against the API.
+  </p>
+
+  <h2>5. Project structure</h2>
+  <div class="tree">mern-ecommerce-project-main/
+├── backend/                     Express API
+│   ├── server.js                Routes, CORS, JSON, static /uploads
+│   ├── config/                  db, cloudinary, razorpay
+│   ├── models/                  User, Product, Order, Category, Offer, Coupon
+│   ├── controllers/             Business logic
+│   ├── routes/                  /api/products, users, orders, upload,
+│   │                            categories, offers, coupons, payments, health
+│   ├── middleware/              JWT protect/admin, multer
+│   └── utils/generateToken.js
+└── client/                      React storefront + admin
+    └── src/
+        ├── routes/              AppRoutes, Protected, Admin, Auth
+        ├── layouts/             Store, Account, Admin
+        ├── pages/               public, auth, account, cart, checkout,
+        │                        orders, admin
+        ├── components/          layout, product, cart, admin forms, ui
+        ├── store/               auth, cart, wishlist
+        └── services/            Axios API helpers</div>
+
+  <h2>6. Backend API (brief)</h2>
+  <table>
+    <tr><th>Area</th><th>Main endpoints</th></tr>
+    <tr><td>Health</td><td>GET /api/health</td></tr>
+    <tr><td>Users</td><td>POST register/login; GET/PUT profile; GET users &amp; DELETE user (admin)</td></tr>
+    <tr><td>Products</td><td>List/search, featured, by id, reviews; admin create/update/delete</td></tr>
+    <tr><td>Orders</td><td>Create, my orders, by id, pay; admin list + mark delivered</td></tr>
+    <tr><td>Categories / offers / coupons</td><td>Public read; admin write</td></tr>
+    <tr><td>Upload</td><td>POST /api/upload (images → Cloudinary)</td></tr>
+    <tr><td>Payments</td><td>POST /api/payments/razorpay/create-order and /verify</td></tr>
+  </table>
+
+  <h2>7. How to run</h2>
+  <ol>
+    <li>Backend <span class="mono">.env</span>: <span class="mono">MONGO_URI</span>, <span class="mono">JWT_SECRET</span>, <span class="mono">PORT</span> (optional, default 5000), <span class="mono">FRONTEND_URL</span> (e.g. http://localhost:5173), Cloudinary keys, Razorpay <span class="mono">KEY_ID</span> / <span class="mono">KEY_SECRET</span>.</li>
+    <li><span class="mono">cd backend</span> → <span class="mono">npm install</span> → <span class="mono">npm run server</span>.</li>
+    <li>Client: <span class="mono">VITE_API_URL</span> pointing at the API (e.g. http://localhost:5000).</li>
+    <li><span class="mono">cd client</span> → <span class="mono">npm install</span> → <span class="mono">npm run dev</span>.</li>
+  </ol>
+  <div class="note">Admin screens are under <span class="mono">/admin/*</span> and need a user with <span class="mono">isAdmin: true</span>. Do not seed or wipe a production database.</div>
+
+  <h2>8. Tech stack</h2>
+  <p>
+    <strong>Client:</strong> React 19, Vite 8, React Router 7, Redux Toolkit, Axios, Tailwind 4, shadcn/ui, react-hook-form, Zod, Razorpay checkout.<br />
+    <strong>Backend:</strong> Express, Mongoose, JWT, bcryptjs, Multer, Cloudinary, Razorpay, CORS, dotenv.
+  </p>
+
+  <p style="margin-top:22px; font-size:10pt; color:#6b7280;">End of summary — based on current <span class="mono">client</span> routes and <span class="mono">backend</span> API.</p>
+</body>
+</html>

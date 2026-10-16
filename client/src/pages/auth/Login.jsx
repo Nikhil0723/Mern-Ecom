@@ -53,7 +53,7 @@ const Login = () => {
     return (
         <AuthLayout
             title="Welcome back"
-            description="Sign in to your SHOPLY account"
+            description="Sign in to your UrbanNest account"
         >  {error && (
             <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                 {error}

@@ -19,15 +19,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import {
-    PlusSignIcon,
-    PencilEdit01Icon,
-    Delete02Icon,
-    PackageIcon,
-    Search01Icon,
-} from "@hugeicons/core-free-icons";
-
-import { HugeiconsIcon } from "@hugeicons/react";
+import { LuPlus, LuPencil, LuTrash2, LuPackage, LuSearch } from "react-icons/lu";
 
 const AdminProducts = () => {
     const [products, setProducts] = useState([]);
@@ -153,12 +145,8 @@ const AdminProducts = () => {
                 </div>
 
                 <Button asChild variant="outline">
-                    <Link to="/admin/products/new" className=" flex gap-1">
-                        <HugeiconsIcon
-                            icon={PlusSignIcon}
-                            size={16}
-                            data-icon="inline-start"
-                        />
+                    <Link to="/admin/products/new">
+                        <LuPlus data-icon="inline-start" />
                         Add product
                     </Link>
                 </Button>
@@ -189,11 +177,7 @@ const AdminProducts = () => {
                         </div>
 
                         <div className="relative w-full lg:max-w-sm">
-                            <HugeiconsIcon
-                                icon={Search01Icon}
-                                size={16}
-                                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                            />
+                            <LuSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
                             <Input
                                 value={search}
@@ -213,10 +197,7 @@ const AdminProducts = () => {
                     {filteredProducts.length === 0 ? (
                         <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
                             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                                <HugeiconsIcon
-                                    icon={PackageIcon}
-                                    size={24}
-                                />
+                                <LuPackage className="size-6" />
                             </div>
 
                             <h3 className="mt-4 font-semibold">
@@ -351,10 +332,7 @@ const AdminProducts = () => {
                                                                     to={`/admin/products/${product._id}/edit`}
                                                                     aria-label={`Edit ${product.name}`}
                                                                 >
-                                                                    <HugeiconsIcon
-                                                                        icon={PencilEdit01Icon}
-                                                                        size={16}
-                                                                    />
+                                                                    <LuPencil />
                                                                 </Link>
                                                             </Button>
 
@@ -373,10 +351,7 @@ const AdminProducts = () => {
                                                                 }
                                                                 aria-label={`Delete ${product.name}`}
                                                             >
-                                                                <HugeiconsIcon
-                                                                    icon={Delete02Icon}
-                                                                    size={16}
-                                                                />
+                                                                <LuTrash2 />
                                                             </Button>
                                                         </div>
                                                     </td>

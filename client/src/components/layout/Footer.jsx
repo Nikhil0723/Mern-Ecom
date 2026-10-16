@@ -13,7 +13,7 @@ const Footer = () => {
                             to="/"
                             className="text-xl font-bold tracking-tight"
                         >
-                            SHOPLY
+                            UrbanNest
                         </Link>
 
                         <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
@@ -129,7 +129,7 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col gap-3 border-t py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-                    <p>© {new Date().getFullYear()} SHOPLY. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} UrbanNest. All rights reserved.</p>
 
                     <p>Built with React & shadcn/ui</p>
                 </div>

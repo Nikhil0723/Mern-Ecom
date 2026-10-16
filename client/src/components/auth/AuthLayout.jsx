@@ -12,7 +12,7 @@ const AuthLayout = ({ children, title, description }) => {
                             to="/"
                             className="text-2xl font-bold tracking-tight"
                         >
-                            SHOPLY
+                            UrbanNest
                         </Link>
 
                         <h1 className="mt-6 text-2xl font-bold tracking-tight">
@@ -29,7 +29,7 @@ const AuthLayout = ({ children, title, description }) => {
                     {children}
 
                     <p className="mt-8 text-center text-xs text-muted-foreground">
-                        © {new Date().getFullYear()} SHOPLY. All rights reserved.
+                        © {new Date().getFullYear()} UrbanNest. All rights reserved.
                     </p>
                 </div>
             </div>
