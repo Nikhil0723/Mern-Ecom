@@ -145,7 +145,7 @@ const AdminProducts = () => {
                 </div>
 
                 <Button asChild variant="outline">
-                    <Link to="/admin/products/new">
+                    <Link to="/admin/products/new" className="flex gap-1">
                         <LuPlus data-icon="inline-start" />
                         Add product
                     </Link>
