@@ -52,9 +52,6 @@ import {
     uploadProductImage,
 } from "../../services/adminProductApi";
 
-/* -------------------------------------------------------------------------- */
-/* Validation                                                                 */
-/* -------------------------------------------------------------------------- */
 
 const productSchema = z
     .object({
@@ -119,9 +116,6 @@ const productSchema = z
         }
     );
 
-/* -------------------------------------------------------------------------- */
-/* Component                                                                  */
-/* -------------------------------------------------------------------------- */
 
 const ProductForm = ({
     product = null,
@@ -155,9 +149,6 @@ const ProductForm = ({
     const [success, setSuccess] =
         useState("");
 
-    /* ---------------------------------------------------------------------- */
-    /* React Hook Form                                                        */
-    /* ---------------------------------------------------------------------- */
 
     const {
         register,
@@ -187,9 +178,6 @@ const ProductForm = ({
     const originalPrice = watch("originalPrice");
     const isFeatured = watch("isFeatured");
 
-    /* ---------------------------------------------------------------------- */
-    /* Edit mode                                                              */
-    /* ---------------------------------------------------------------------- */
 
     useEffect(() => {
         if (!product) {
@@ -211,9 +199,6 @@ const ProductForm = ({
         setSelectedImage(null);
     }, [product, reset]);
 
-    /* ---------------------------------------------------------------------- */
-    /* Image selection                                                        */
-    /* ---------------------------------------------------------------------- */
 
     const handleImageChange = (event) => {
         const file = event.target.files?.[0];
@@ -257,10 +242,6 @@ const ProductForm = ({
         setImagePreview(previewUrl);
     };
 
-    /* ---------------------------------------------------------------------- */
-    /* Remove selected image                                                  */
-    /* ---------------------------------------------------------------------- */
-
     const removeSelectedImage = () => {
         setSelectedImage(null);
 
@@ -271,9 +252,6 @@ const ProductForm = ({
         }
     };
 
-    /* ---------------------------------------------------------------------- */
-    /* Submit                                                                 */
-    /* ---------------------------------------------------------------------- */
 
     const onSubmit = async (data) => {
         try {
@@ -385,10 +363,6 @@ const ProductForm = ({
     const isLoading =
         saving || uploadingImage;
 
-    /* ---------------------------------------------------------------------- */
-    /* Discount calculation                                                   */
-    /* ---------------------------------------------------------------------- */
-
     const numericSellingPrice =
         Number(sellingPrice);
 
@@ -410,9 +384,6 @@ const ProductForm = ({
             )
             : 0;
 
-    /* ---------------------------------------------------------------------- */
-    /* Render                                                                 */
-    /* ---------------------------------------------------------------------- */
 
     return (
         <div className="space-y-6">
@@ -476,9 +447,6 @@ const ProductForm = ({
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid gap-6 lg:grid-cols-[1fr_380px]"
             >
-                {/* ================================================================ */}
-                {/* LEFT                                                               */}
-                {/* ================================================================ */}
 
                 <div className="space-y-6">
                     {/* Product Information */}
@@ -852,10 +820,6 @@ const ProductForm = ({
                         </CardContent>
                     </Card>
                 </div>
-
-                {/* ================================================================ */}
-                {/* RIGHT                                                              */}
-                {/* ================================================================ */}
 
                 <Card className="h-fit">
                     <CardHeader>

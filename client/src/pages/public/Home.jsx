@@ -328,9 +328,6 @@ const Home = () => {
                 </PageContainer>
             </section>
 
-            {/* ================================================== */}
-            {/* PROMOTIONAL FALLBACK BANNER */}
-            {/* ================================================== */}
 
             <section className="py-16 sm:py-20">
                 <PageContainer>
@@ -369,9 +366,6 @@ const Home = () => {
                 </PageContainer>
             </section>
 
-            {/* ================================================== */}
-            {/* LATEST PRODUCTS */}
-            {/* ================================================== */}
 
             <section className="py-16 sm:py-20">
                 <PageContainer>
@@ -411,9 +405,6 @@ const Home = () => {
                 </PageContainer>
             </section>
 
-            {/* ================================================== */}
-            {/* WHY SHOP WITH US */}
-            {/* ================================================== */}
 
             <section className="border-y bg-muted/30 py-14">
                 <PageContainer>
@@ -445,9 +436,6 @@ const Home = () => {
                 </PageContainer>
             </section>
 
-            {/* ================================================== */}
-            {/* NEWSLETTER */}
-            {/* ================================================== */}
 
             <section className="py-16 sm:py-20">
                 <PageContainer>

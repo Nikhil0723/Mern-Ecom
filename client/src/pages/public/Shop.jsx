@@ -42,18 +42,12 @@ const Shop = () => {
   const [searchParams, setSearchParams] =
     useSearchParams();
 
-  // -----------------------------------------
-  // Categories from backend
-  // -----------------------------------------
   const {
     categories,
     loading: categoriesLoading,
     error: categoriesError,
   } = useCategories();
 
-  // -----------------------------------------
-  // URL state
-  // -----------------------------------------
   const searchQuery =
     searchParams.get("search") || "";
 
@@ -69,9 +63,6 @@ const Shop = () => {
   const pageQuery =
     Number(searchParams.get("page")) || 1;
 
-  // -----------------------------------------
-  // Local state
-  // -----------------------------------------
   const [searchInput, setSearchInput] =
     useState(searchQuery);
 
@@ -93,16 +84,10 @@ const Shop = () => {
   const [total, setTotal] =
     useState(0);
 
-  // -----------------------------------------
-  // Sync search input with URL
-  // -----------------------------------------
   useEffect(() => {
     setSearchInput(searchQuery);
   }, [searchQuery]);
 
-  // -----------------------------------------
-  // Fetch products
-  // -----------------------------------------
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -112,8 +97,6 @@ const Shop = () => {
         const data = await getProducts({
           keyword: searchQuery || undefined,
 
-          // Category comes directly from URL
-          // and is sent to backend.
           category:
             categoryQuery || undefined,
 
@@ -161,9 +144,6 @@ const Shop = () => {
     pageQuery,
   ]);
 
-  // -----------------------------------------
-  // Search
-  // -----------------------------------------
   const handleSearch = (event) => {
     event.preventDefault();
 
@@ -183,9 +163,6 @@ const Shop = () => {
     setSearchParams(params);
   };
 
-  // -----------------------------------------
-  // Category filter
-  // -----------------------------------------
   const handleCategoryChange = (
     categoryName,
     checked
@@ -209,9 +186,6 @@ const Shop = () => {
     setSearchParams(params);
   };
 
-  // -----------------------------------------
-  // Clear category
-  // -----------------------------------------
   const clearCategory = () => {
     const params =
       new URLSearchParams(searchParams);
@@ -222,9 +196,6 @@ const Shop = () => {
     setSearchParams(params);
   };
 
-  // -----------------------------------------
-  // Sort
-  // -----------------------------------------
   const handleSortChange = (value) => {
     const params =
       new URLSearchParams(searchParams);
@@ -239,19 +210,12 @@ const Shop = () => {
 
     setSearchParams(params);
   };
-
-  // -----------------------------------------
-  // Clear all filters
-  // -----------------------------------------
   const clearFilters = () => {
     setSearchInput("");
 
     setSearchParams({});
   };
 
-  // -----------------------------------------
-  // Pagination
-  // -----------------------------------------
   const goToPage = (nextPage) => {
     if (
       nextPage < 1 ||
@@ -279,15 +243,8 @@ const Shop = () => {
       behavior: "smooth",
     });
   };
-
-  // -----------------------------------------
-  // Filters UI
-  // -----------------------------------------
   const filters = (
     <div className="space-y-6">
-      {/* ---------------------------------- */}
-      {/* Categories */}
-      {/* ---------------------------------- */}
       <div>
         <div className="mb-3 flex items-center justify-between">
           <Label className="text-sm font-semibold">
@@ -380,9 +337,6 @@ const Shop = () => {
 
       <Separator />
 
-      {/* ---------------------------------- */}
-      {/* Sort */}
-      {/* ---------------------------------- */}
       <div>
         <Label className="mb-3 block text-sm font-semibold ">
           Sort by
@@ -459,16 +413,10 @@ const Shop = () => {
     </div>
   );
 
-  // -----------------------------------------
-  // Render
-  // -----------------------------------------
   return (
     <div className="py-8">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        {/* -------------------------------- */}
-        {/* Page Header */}
-        {/* -------------------------------- */}
         <div className="mb-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
@@ -526,9 +474,6 @@ const Shop = () => {
           </div>
         </div>
 
-        {/* -------------------------------- */}
-        {/* Search */}
-        {/* -------------------------------- */}
         <form
           onSubmit={handleSearch}
           className="mb-8 flex gap-2  "
@@ -557,14 +502,8 @@ const Shop = () => {
           </Button>
         </form>
 
-        {/* -------------------------------- */}
-        {/* Main Layout */}
-        {/* -------------------------------- */}
         <div className="grid gap-8 md:grid-cols-[240px_1fr]">
 
-          {/* -------------------------------- */}
-          {/* Desktop Filters */}
-          {/* -------------------------------- */}
           <aside className="hidden md:block">
             <Card className="sticky top-24 p-5">
 
@@ -586,9 +525,6 @@ const Shop = () => {
             </Card>
           </aside>
 
-          {/* -------------------------------- */}
-          {/* Products */}
-          {/* -------------------------------- */}
           <section>
 
             {/* Product toolbar */}
@@ -657,9 +593,6 @@ const Shop = () => {
               </Select>
             </div>
 
-            {/* -------------------------------- */}
-            {/* Loading */}
-            {/* -------------------------------- */}
 
             {!error && (
               <ProductGrid

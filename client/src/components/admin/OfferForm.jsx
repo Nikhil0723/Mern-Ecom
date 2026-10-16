@@ -53,9 +53,6 @@ import {
     uploadProductImage,
 } from "../../services/adminProductApi";
 
-/* -------------------------------------------------------------------------- */
-/* Validation                                                                 */
-/* -------------------------------------------------------------------------- */
 
 const offerSchema = z
     .object({
@@ -124,9 +121,6 @@ const offerSchema = z
         }
     );
 
-/* -------------------------------------------------------------------------- */
-/* Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
 
 const formatDateTimeLocal = (date) => {
     if (!date) {
@@ -160,9 +154,6 @@ const formatDateTimeLocal = (date) => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-/* -------------------------------------------------------------------------- */
-/* Component                                                                  */
-/* -------------------------------------------------------------------------- */
 
 const OfferForm = ({
     offer = null,
@@ -196,9 +187,6 @@ const OfferForm = ({
     const [previewMode, setPreviewMode] =
         useState("desktop");
 
-    /* ---------------------------------------------------------------------- */
-    /* Form                                                                    */
-    /* ---------------------------------------------------------------------- */
 
     const {
         register,
@@ -238,9 +226,6 @@ const OfferForm = ({
     const buttonText = watch("buttonText");
     const buttonLink = watch("buttonLink");
 
-    /* ---------------------------------------------------------------------- */
-    /* Edit mode                                                               */
-    /* ---------------------------------------------------------------------- */
 
     useEffect(() => {
         if (!offer) {
@@ -273,9 +258,6 @@ const OfferForm = ({
         setSelectedImage(null);
     }, [offer, reset]);
 
-    /* ---------------------------------------------------------------------- */
-    /* Image selection                                                         */
-    /* ---------------------------------------------------------------------- */
 
     const handleImageChange = (event) => {
         const file =
@@ -324,9 +306,6 @@ const OfferForm = ({
         setImagePreview(previewUrl);
     };
 
-    /* ---------------------------------------------------------------------- */
-    /* Remove image                                                            */
-    /* ---------------------------------------------------------------------- */
 
     const removeSelectedImage = () => {
         setSelectedImage(null);
@@ -340,11 +319,7 @@ const OfferForm = ({
         }
     };
 
-    /* ---------------------------------------------------------------------- */
-    /* Submit                                                                  */
-    /* ---------------------------------------------------------------------- */
-
-    const onSubmit = async (data) => {
+const onSubmit = async (data) => {
         try {
             setError("");
             setSuccess("");
@@ -489,10 +464,6 @@ const OfferForm = ({
     const isLoading =
         saving || uploadingImage;
 
-    /* ---------------------------------------------------------------------- */
-    /* Preview                                                                 */
-    /* ---------------------------------------------------------------------- */
-
     const previewWidth =
         previewMode === "desktop"
             ? "w-full"
@@ -506,10 +477,6 @@ const OfferForm = ({
         }),
         [imagePreview]
     );
-
-    /* ---------------------------------------------------------------------- */
-    /* Render                                                                  */
-    /* ---------------------------------------------------------------------- */
 
     return (
         <div className="space-y-6">
@@ -570,9 +537,6 @@ const OfferForm = ({
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid gap-6 xl:grid-cols-[1fr_520px]"
             >
-                {/* ================================================================= */}
-                {/* LEFT                                                               */}
-                {/* ================================================================= */}
 
                 <div className="space-y-6">
                     {/* Offer Information */}
@@ -945,10 +909,6 @@ const OfferForm = ({
                         </CardContent>
                     </Card>
                 </div>
-
-                {/* ================================================================= */}
-                {/* RIGHT - PREVIEW                                                   */}
-                {/* ================================================================= */}
 
                 <div className="space-y-6 xl:sticky xl:top-6 xl:self-start">
                     <Card>

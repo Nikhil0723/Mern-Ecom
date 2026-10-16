@@ -148,10 +148,6 @@ const PlaceOrder = () => {
             const couponCode =
                 appliedCoupon?.coupon?.code || null;
 
-            // =================================================
-            // COD
-            // =================================================
-
             if (paymentMethod === "COD") {
                 const orderData = {
                     orderItems,
@@ -171,14 +167,8 @@ const PlaceOrder = () => {
                 return;
             }
 
-            // =================================================
-            // RAZORPAY
-            // =================================================
 
             if (paymentMethod === "RAZORPAY") {
-                // ---------------------------------------------
-                // 1. Ask backend to create Razorpay order
-                // ---------------------------------------------
 
                 const razorpayOrder =
                     await createRazorpayOrder({
@@ -186,9 +176,6 @@ const PlaceOrder = () => {
                         couponCode,
                     });
 
-                // ---------------------------------------------
-                // 2. Open Razorpay Checkout
-                // ---------------------------------------------
 
                 const options = {
                     key: import.meta.env
@@ -229,9 +216,6 @@ const PlaceOrder = () => {
                             setLoading(true);
                             setError("");
 
-                            // ---------------------------------------
-                            // 3. Verify payment on backend
-                            // ---------------------------------------
 
                             const verification =
                                 await verifyRazorpayPayment({
@@ -244,9 +228,6 @@ const PlaceOrder = () => {
                                     razorpay_signature:
                                         response.razorpay_signature,
                                 });
-                            // ---------------------------------------
-                            // 4. ONLY NOW create our actual order
-                            // ---------------------------------------
 
                             const createdOrder =
                                 await createOrder({
@@ -297,9 +278,6 @@ const PlaceOrder = () => {
                 return;
             }
 
-            // =================================================
-            // UNKNOWN PAYMENT METHOD
-            // =================================================
 
             setError(
                 "Please select a valid payment method."

@@ -126,10 +126,7 @@ export const createRazorpayOrder = async (req, res) => {
             couponCode = null,
         } = req.body;
 
-        // -----------------------------------------
-        // Basic validation
-        // -----------------------------------------
-
+    
         if (
             !Array.isArray(orderItems) ||
             orderItems.length === 0
@@ -138,10 +135,6 @@ export const createRazorpayOrder = async (req, res) => {
                 message: "No order items",
             });
         }
-
-        // -----------------------------------------
-        // Fetch current products from DB
-        // -----------------------------------------
 
         const productIds = orderItems.map(
             (item) => item.product
@@ -158,10 +151,7 @@ export const createRazorpayOrder = async (req, res) => {
             });
         }
 
-        // -----------------------------------------
-        // Calculate subtotal from DB prices
-        // -----------------------------------------
-
+ 
         let itemsPrice = 0;
 
         for (const item of orderItems) {
@@ -204,9 +194,6 @@ export const createRazorpayOrder = async (req, res) => {
             itemsPrice.toFixed(2)
         );
 
-        // -----------------------------------------
-        // Coupon
-        // -----------------------------------------
 
         let couponDiscount = 0;
         let appliedCouponCode = null;
@@ -311,9 +298,6 @@ export const createRazorpayOrder = async (req, res) => {
                 coupon.code;
         }
 
-        // -----------------------------------------
-        // Tax + shipping
-        // -----------------------------------------
 
         const shippingPrice = 0;
 
@@ -344,9 +328,6 @@ export const createRazorpayOrder = async (req, res) => {
             });
         }
 
-        // -----------------------------------------
-        // Create Razorpay order
-        // -----------------------------------------
 
         const razorpayOrder =
             await razorpay.orders.create({
@@ -363,9 +344,6 @@ export const createRazorpayOrder = async (req, res) => {
                 },
             });
 
-        // -----------------------------------------
-        // Return gateway data + server total
-        // -----------------------------------------
 
         res.status(201).json({
             id: razorpayOrder.id,
