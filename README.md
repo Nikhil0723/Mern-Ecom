@@ -1,8 +1,8 @@
 # UrbanNest — MERN E-Commerce
 
-UrbanNest is a full-stack e-commerce application built with the MERN stack. It provides a storefront for browsing products and categories, along with administrative tools for managing store content.
+UrbanNest is a MERN e-commerce project built around a simple idea: make it easy to browse home and lifestyle products, while giving the store owner a place to manage the catalog.
 
-> **Portfolio project:** Update this README as the implementation evolves. Features listed below should be enabled and tested in your current codebase before you describe them as production-ready.
+> This is a portfolio project. Some features may still be in development, so check the current app before treating every item below as finished.
 
 ## Live Demo
 
@@ -215,6 +215,21 @@ Category functionality discussed in this project includes:
 - Filtering categories by navbar visibility, where supported
 
 Do not assume endpoint methods, authentication requirements, or request bodies without checking the current route/controller definitions.
+
+## Demo Login Accounts
+
+For testing the app, there are two demo accounts:
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@urbannest.demo` | `UrbanNest@Admin123` |
+| Customer | `user@urbannest.demo` | `UrbanNest@User123` |
+
+The admin account should have `isAdmin: true`, while the customer account should have `isAdmin: false`.
+
+These credentials will work only if the matching passwords have been set for these users in the database. Passwords are stored as bcrypt hashes, so if login fails, reset the passwords through your backend's password-hashing logic rather than pasting plaintext passwords into the database.
+
+These are demo credentials for a portfolio project only. If you publish this repository, remember that anyone who can read the README can see them. Do not use these passwords for real accounts, and change them if the app contains data you need to protect.
 
 ## Sample Store Data
 
