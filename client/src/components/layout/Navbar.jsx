@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,7 +10,6 @@ import {
     Logout01Icon,
     Settings01Icon,
     PackageIcon,
-    ArrowRight01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -28,29 +27,86 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 import { logout } from "@/store/authSlice";
+import { getCategories } from "@/services/categoryApi";
 
 import PageContainer from "./PageContainer";
 import MobileNav from "./MobileNav";
 
+// Convert a category name into a URL value.
+// Example: "Home & Living" -> "home-living"
+const categoryToSlug = (name = "") =>
+    name
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
 const Navbar = () => {
     const userInfo = useSelector((state) => state.auth.userInfo);
+    const cartItems = useSelector((state) => state.cart.cartItems);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [navbarCategories, setNavbarCategories] = useState([]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const fetchNavbarCategories = async () => {
+            try {
+                // Fetch all categories, then apply the display rules.
+                const categories = await getCategories();
+
+                if (!Array.isArray(categories) || cancelled) {
+                    return;
+                }
+
+                const enabledCategories = categories
+                    .filter((category) => category.showInNavbar === true)
+                    .sort(
+                        (a, b) =>
+                            (a.navbarOrder ?? 0) - (b.navbarOrder ?? 0) ||
+                            a.name.localeCompare(b.name)
+                    );
+
+                const selectedCategories = (
+                    enabledCategories.length > 0
+                        ? enabledCategories
+                        : [...categories].sort((a, b) =>
+                            a.name.localeCompare(b.name)
+                        )
+                ).slice(0, 3);
+
+                setNavbarCategories(selectedCategories);
+            } catch (error) {
+                console.error("Failed to fetch navbar categories:", error);
+
+                if (!cancelled) {
+                    setNavbarCategories([]);
+                }
+            }
+        };
+
+        fetchNavbarCategories();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
     const handleLogout = () => {
         dispatch(logout());
         navigate("/", { replace: true });
     };
-    const cartItems = useSelector(
-        (state) => state.cart.cartItems
-    );
 
     const cartCount = cartItems.reduce(
         (total, item) => total + item.qty,
         0
     );
+
     const handleSearch = (event) => {
         event.preventDefault();
 
@@ -62,7 +118,7 @@ const Navbar = () => {
             return;
         }
 
-        navigate(`/shop?search=${encodeURIComponent(search)}`);
+        navigate(`/ shop ? search = ${encodeURIComponent(search)} `);
     };
 
     const isActive = (path) => {
@@ -71,6 +127,23 @@ const Navbar = () => {
         }
 
         return location.pathname.startsWith(path);
+    };
+
+    const getCategoryUrl = (category) => {
+        const slug = category.slug || categoryToSlug(category.name);
+
+        return `/shop?category=${encodeURIComponent(slug)}`;
+    };
+
+    const isCategoryActive = (category) => {
+        const params = new URLSearchParams(location.search);
+        const selectedCategory = params.get("category");
+
+        return (
+            location.pathname === "/shop" &&
+            selectedCategory ===
+            (category.slug || categoryToSlug(category.name))
+        );
     };
 
     return (
@@ -89,37 +162,36 @@ const Navbar = () => {
                     <nav className="hidden items-center gap-5 lg:flex">
                         <Link
                             to="/"
-                            className={`text-sm font-medium transition-colors ${isActive("/")
-                                ? "text-foreground"
-                                : "text-muted-foreground hover:text-foreground"
-                                }`}
+                            className={`text - sm font - medium transition - colors ${isActive("/")
+                                    ? "text-foreground"
+                                    : "text-muted-foreground hover:text-foreground"
+                                } `}
                         >
                             Home
                         </Link>
 
                         <Link
                             to="/shop"
-                            className={`text-sm font-medium transition-colors ${isActive("/shop")
-                                ? "text-foreground"
-                                : "text-muted-foreground hover:text-foreground"
-                                }`}
+                            className={`text - sm font - medium transition - colors ${isActive("/shop")
+                                    ? "text-foreground"
+                                    : "text-muted-foreground hover:text-foreground"
+                                } `}
                         >
                             Shop
                         </Link>
 
-                        <Link
-                            to="/shop?category=electronics"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Electronics
-                        </Link>
-
-                        <Link
-                            to="/shop?category=clothing"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Clothing
-                        </Link>
+                        {navbarCategories.map((category) => (
+                            <Link
+                                key={category._id}
+                                to={getCategoryUrl(category)}
+                                className={`whitespace - nowrap text - sm font - medium transition - colors ${isCategoryActive(category)
+                                        ? "text-foreground"
+                                        : "text-muted-foreground hover:text-foreground"
+                                    } `}
+                            >
+                                {category.name}
+                            </Link>
+                        ))}
 
                         <Link
                             to="/shop?sort=featured"
@@ -182,11 +254,17 @@ const Navbar = () => {
                                         aria-label="Account menu"
                                         className="rounded-full"
                                     >
-                                        <HugeiconsIcon icon={UserIcon} size={20} />
+                                        <HugeiconsIcon
+                                            icon={UserIcon}
+                                            size={20}
+                                        />
                                     </Button>
                                 </DropdownMenuTrigger>
 
-                                <DropdownMenuContent align="end" className="w-56 bg-white">
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-56 bg-white"
+                                >
                                     <DropdownMenuGroup>
                                         <DropdownMenuLabel>
                                             <div className="flex flex-col">
@@ -203,44 +281,72 @@ const Navbar = () => {
                                     <DropdownMenuSeparator />
 
                                     <DropdownMenuGroup>
-                                        <DropdownMenuItem onClick={() => navigate("/account")}>
-                                            <HugeiconsIcon icon={UserIcon} size={16} />
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                navigate("/account")
+                                            }
+                                        >
+                                            <HugeiconsIcon
+                                                icon={UserIcon}
+                                                size={16}
+                                            />
                                             <span>My Profile</span>
                                         </DropdownMenuItem>
 
-                                        <DropdownMenuItem onClick={() => navigate("/orders")}>
-                                            <HugeiconsIcon icon={PackageIcon} size={16} />
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                navigate("/orders")
+                                            }
+                                        >
+                                            <HugeiconsIcon
+                                                icon={PackageIcon}
+                                                size={16}
+                                            />
                                             <span>My Orders</span>
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem
-                                            onClick={() => navigate("/account/wishlist")}
+                                            onClick={() =>
+                                                navigate("/account/wishlist")
+                                            }
                                         >
-                                            <HugeiconsIcon icon={FavouriteIcon} size={16} />
+                                            <HugeiconsIcon
+                                                icon={FavouriteIcon}
+                                                size={16}
+                                            />
                                             <span>Wishlist</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
-
-                                    <DropdownMenuSeparator />
 
                                     {userInfo.isAdmin && (
                                         <>
                                             <DropdownMenuSeparator />
 
                                             <DropdownMenuItem
-                                                onClick={() => navigate("/admin/")}
+                                                onClick={() =>
+                                                    navigate("/admin/")
+                                                }
                                                 className="cursor-pointer"
                                             >
-                                                <HugeiconsIcon icon={Settings01Icon} size={16} />
+                                                <HugeiconsIcon
+                                                    icon={Settings01Icon}
+                                                    size={16}
+                                                />
                                                 <span>Admin Dashboard</span>
                                             </DropdownMenuItem>
                                         </>
                                     )}
 
+                                    <DropdownMenuSeparator />
 
                                     <DropdownMenuGroup>
-                                        <DropdownMenuItem onClick={handleLogout}>
-                                            <HugeiconsIcon icon={Logout01Icon} size={16} />
+                                        <DropdownMenuItem
+                                            onClick={handleLogout}
+                                        >
+                                            <HugeiconsIcon
+                                                icon={Logout01Icon}
+                                                size={16}
+                                            />
                                             <span>Logout</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
@@ -269,10 +375,7 @@ const Navbar = () => {
                             size="icon"
                             className="relative rounded-full"
                         >
-                            <Link
-                                to="/cart"
-                                aria-label="Shopping cart"
-                            >
+                            <Link to="/cart" aria-label="Shopping cart">
                                 <HugeiconsIcon
                                     icon={ShoppingCart01Icon}
                                     size={21}
@@ -280,9 +383,7 @@ const Navbar = () => {
                                 />
 
                                 {cartCount > 0 && (
-                                    <Badge
-                                        className="absolute -right-1 -top-1 min-w-5 px-1 text-[10px]"
-                                    >
+                                    <Badge className="absolute -right-1 -top-1 min-w-5 px-1 text-[10px]">
                                         {cartCount}
                                     </Badge>
                                 )}
@@ -290,7 +391,7 @@ const Navbar = () => {
                         </Button>
 
                         {/* Mobile menu */}
-                        <MobileNav />
+                        <MobileNav categories={navbarCategories} />
                     </div>
                 </div>
             </PageContainer>

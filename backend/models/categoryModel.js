@@ -14,6 +14,16 @@ const categorySchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+
+    showInNavbar: {
+      type: Boolean,
+      default: false,
+    },
+
+    navbarOrder: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import {
     Menu01Icon,
     Home01Icon,
@@ -8,7 +9,7 @@ import {
     UserIcon,
     PackageIcon,
     FavouriteIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
@@ -19,7 +20,22 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 
-const MobileNav = () => {
+// Keep this consistent with Navbar.jsx
+const categoryToSlug = (name = "") =>
+    name
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+const MobileNav = ({ categories = [] }) => {
+    const getCategoryUrl = (category) => {
+        const slug = category.slug || categoryToSlug(category.name);
+
+        return `/shop?category=${encodeURIComponent(slug)}`;
+    };
+
     return (
         <div className="lg:hidden">
             <Sheet>
@@ -37,7 +53,10 @@ const MobileNav = () => {
                     </button>
                 </SheetTrigger>
 
-                <SheetContent side="left" className="w-[280px] sm:w-[320px]">
+                <SheetContent
+                    side="left"
+                    className="w-[280px] sm:w-[320px]"
+                >
                     <SheetHeader>
                         <SheetTitle className="text-left text-xl font-bold">
                             UrbanNest
@@ -57,17 +76,14 @@ const MobileNav = () => {
                             label="Shop"
                         />
 
-                        <MobileNavLink
-                            to="/shop?category=electronics"
-                            icon={ShoppingBag01Icon}
-                            label="Electronics"
-                        />
-
-                        <MobileNavLink
-                            to="/shop?category=clothing"
-                            icon={ShoppingBag01Icon}
-                            label="Clothing"
-                        />
+                        {categories.slice(0, 3).map((category) => (
+                            <MobileNavLink
+                                key={category._id}
+                                to={getCategoryUrl(category)}
+                                icon={ShoppingBag01Icon}
+                                label={category.name}
+                            />
+                        ))}
 
                         <MobileNavLink
                             to="/shop?sort=featured"
@@ -101,22 +117,20 @@ const MobileNav = () => {
     );
 };
 
-const MobileNavLink = ({ to, icon, label }) => {
-    return (
-        <Link
-            to={to}
-            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors hover:bg-muted"
-        >
-            <HugeiconsIcon
-                icon={icon}
-                size={20}
-                strokeWidth={1.8}
-                className="text-muted-foreground"
-            />
+const MobileNavLink = ({ to, icon, label }) => (
+    <Link
+        to={to}
+        className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors hover:bg-muted"
+    >
+        <HugeiconsIcon
+            icon={icon}
+            size={20}
+            strokeWidth={1.8}
+            className="text-muted-foreground"
+        />
 
-            <span>{label}</span>
-        </Link>
-    );
-};
+        <span>{label}</span>
+    </Link>
+);
 
 export default MobileNav;

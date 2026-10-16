@@ -22,6 +22,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { Separator } from "@/components/ui/separator";
 
+import { Checkbox } from "@/components/ui/checkbox";
+
 import {
     Dialog,
     DialogContent,
@@ -50,22 +52,18 @@ const AdminCategories = () => {
 
     const [error, setError] = useState("");
 
-    const [dialogOpen, setDialogOpen] =
-        useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-    const [deleteDialogOpen, setDeleteDialogOpen] =
-        useState(false);
-
-    const [editingCategory, setEditingCategory] =
-        useState(null);
-
-    const [categoryToDelete, setCategoryToDelete] =
-        useState(null);
+    const [editingCategory, setEditingCategory] = useState(null);
+    const [categoryToDelete, setCategoryToDelete] = useState(null);
 
     const [name, setName] = useState("");
-    const [description, setDescription] =
-        useState("");
+    const [description, setDescription] = useState("");
+    const [showInNavbar, setShowInNavbar] = useState(false);
+    const [navbarOrder, setNavbarOrder] = useState("0");
 
+    // Fetch all categories
     const fetchCategories = async () => {
         try {
             setLoading(true);
@@ -77,7 +75,7 @@ const AdminCategories = () => {
         } catch (err) {
             setError(
                 err.response?.data?.message ||
-                "Failed to load categories."
+                    "Failed to load categories."
             );
         } finally {
             setLoading(false);
@@ -88,29 +86,57 @@ const AdminCategories = () => {
         fetchCategories();
     }, []);
 
-    const openCreateDialog = () => {
-        setEditingCategory(null);
+    // Reset form fields
+    const resetForm = () => {
         setName("");
         setDescription("");
+        setShowInNavbar(false);
+        setNavbarOrder("0");
+        setEditingCategory(null);
+    };
+
+    // Open create dialog
+    const openCreateDialog = () => {
+        resetForm();
         setError("");
         setDialogOpen(true);
     };
 
+    // Open edit dialog
     const openEditDialog = (category) => {
         setEditingCategory(category);
+
         setName(category.name || "");
-        setDescription(
-            category.description || ""
-        );
+        setDescription(category.description || "");
+        setShowInNavbar(category.showInNavbar ?? false);
+        setNavbarOrder(String(category.navbarOrder ?? 0));
+
         setError("");
         setDialogOpen(true);
     };
 
+    // Create or update category
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (!name.trim()) {
             setError("Category name is required.");
+            return;
+        }
+
+        const parsedNavbarOrder = Number(navbarOrder);
+
+        if (
+            showInNavbar &&
+            (
+                navbarOrder.trim() === "" ||
+                !Number.isInteger(parsedNavbarOrder) ||
+                parsedNavbarOrder < 0
+            )
+        ) {
+            setError(
+                "Navbar order must be a non-negative whole number."
+            );
             return;
         }
 
@@ -121,51 +147,52 @@ const AdminCategories = () => {
             const categoryData = {
                 name: name.trim(),
                 description: description.trim(),
+                showInNavbar,
+                navbarOrder: parsedNavbarOrder,
             };
 
             if (editingCategory) {
-                const updatedCategory =
-                    await updateCategory(
-                        editingCategory._id,
-                        categoryData
-                    );
+                const updatedCategory = await updateCategory(
+                    editingCategory._id,
+                    categoryData
+                );
 
                 setCategories((current) =>
-                    current.map((category) =>
-                        category._id ===
-                            editingCategory._id
-                            ? updatedCategory
-                            : category
-                    )
+                    current
+                        .map((category) =>
+                            category._id === editingCategory._id
+                                ? updatedCategory
+                                : category
+                        )
+                        .sort((a, b) =>
+                            a.name.localeCompare(b.name)
+                        )
                 );
             } else {
-                const newCategory =
-                    await createCategory(
-                        categoryData
-                    );
+                const newCategory = await createCategory(
+                    categoryData
+                );
 
                 setCategories((current) =>
-                    [...current, newCategory].sort(
-                        (a, b) =>
-                            a.name.localeCompare(b.name)
+                    [...current, newCategory].sort((a, b) =>
+                        a.name.localeCompare(b.name)
                     )
                 );
             }
 
             setDialogOpen(false);
-            setName("");
-            setDescription("");
-            setEditingCategory(null);
+            resetForm();
         } catch (err) {
             setError(
                 err.response?.data?.message ||
-                "Failed to save category."
+                    "Failed to save category."
             );
         } finally {
             setSaving(false);
         }
     };
 
+    // Delete category
     const handleDelete = async () => {
         if (!categoryToDelete) {
             return;
@@ -175,15 +202,12 @@ const AdminCategories = () => {
             setDeleting(true);
             setError("");
 
-            await deleteCategory(
-                categoryToDelete._id
-            );
+            await deleteCategory(categoryToDelete._id);
 
             setCategories((current) =>
                 current.filter(
                     (category) =>
-                        category._id !==
-                        categoryToDelete._id
+                        category._id !== categoryToDelete._id
                 )
             );
 
@@ -192,13 +216,14 @@ const AdminCategories = () => {
         } catch (err) {
             setError(
                 err.response?.data?.message ||
-                "Failed to delete category."
+                    "Failed to delete category."
             );
         } finally {
             setDeleting(false);
         }
     };
 
+    // Loading state
     if (loading) {
         return (
             <div className="flex min-h-[300px] items-center justify-center">
@@ -226,8 +251,8 @@ const AdminCategories = () => {
                         </h1>
 
                         <p className="text-sm text-muted-foreground">
-                            Manage the product categories used
-                            across your store.
+                            Manage the product categories used across
+                            your store and navigation menus.
                         </p>
                     </div>
 
@@ -236,14 +261,16 @@ const AdminCategories = () => {
                             icon={PlusSignIcon}
                             size={18}
                         />
-
                         Add Category
                     </Button>
                 </div>
 
                 {/* Error */}
                 {error && (
-                    <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+                    <div
+                        role="alert"
+                        className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
+                    >
                         {error}
                     </div>
                 )}
@@ -270,12 +297,10 @@ const AdminCategories = () => {
                     </CardContent>
                 </Card>
 
-                {/* Categories */}
+                {/* Categories list */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>
-                            All Categories
-                        </CardTitle>
+                        <CardTitle>All Categories</CardTitle>
                     </CardHeader>
 
                     <Separator />
@@ -295,8 +320,7 @@ const AdminCategories = () => {
                                 </h3>
 
                                 <p className="mt-1 text-sm text-muted-foreground">
-                                    Create your first product
-                                    category.
+                                    Create your first product category.
                                 </p>
 
                                 <Button
@@ -307,7 +331,6 @@ const AdminCategories = () => {
                                         icon={PlusSignIcon}
                                         size={18}
                                     />
-
                                     Add Category
                                 </Button>
                             </div>
@@ -334,11 +357,22 @@ const AdminCategories = () => {
 
                                                     {category.description && (
                                                         <p className="mt-1 text-sm text-muted-foreground">
-                                                            {
-                                                                category.description
-                                                            }
+                                                            {category.description}
                                                         </p>
                                                     )}
+
+                                                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                                                        {category.showInNavbar ? (
+                                                            <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium">
+                                                                In navbar · Order{" "}
+                                                                {category.navbarOrder ?? 0}
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
+                                                                Hidden from navbar
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,16 +382,13 @@ const AdminCategories = () => {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() =>
-                                                    openEditDialog(
-                                                        category
-                                                    )
+                                                    openEditDialog(category)
                                                 }
                                             >
                                                 <HugeiconsIcon
                                                     icon={PencilEdit02Icon}
                                                     size={16}
                                                 />
-
                                                 Edit
                                             </Button>
 
@@ -368,17 +399,13 @@ const AdminCategories = () => {
                                                     setCategoryToDelete(
                                                         category
                                                     );
-
-                                                    setDeleteDialogOpen(
-                                                        true
-                                                    );
+                                                    setDeleteDialogOpen(true);
                                                 }}
                                             >
                                                 <HugeiconsIcon
                                                     icon={Delete02Icon}
                                                     size={16}
                                                 />
-
                                                 Delete
                                             </Button>
                                         </div>
@@ -396,6 +423,10 @@ const AdminCategories = () => {
                 onOpenChange={(open) => {
                     if (!saving) {
                         setDialogOpen(open);
+
+                        if (!open) {
+                            resetForm();
+                        }
                     }
                 }}
             >
@@ -409,8 +440,8 @@ const AdminCategories = () => {
 
                         <DialogDescription>
                             {editingCategory
-                                ? "Update this category."
-                                : "Add a new category to your store."}
+                                ? "Update this category and its navbar settings."
+                                : "Add a category to your store and optionally show it in the navbar."}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -418,6 +449,7 @@ const AdminCategories = () => {
                         onSubmit={handleSubmit}
                         className="space-y-5"
                     >
+                        {/* Category name */}
                         <div className="space-y-2">
                             <label
                                 htmlFor="category-name"
@@ -434,9 +466,11 @@ const AdminCategories = () => {
                                 }
                                 placeholder="e.g. Electronics"
                                 disabled={saving}
+                                required
                             />
                         </div>
 
+                        {/* Description */}
                         <div className="space-y-2">
                             <label
                                 htmlFor="category-description"
@@ -449,9 +483,7 @@ const AdminCategories = () => {
                                 id="category-description"
                                 value={description}
                                 onChange={(event) =>
-                                    setDescription(
-                                        event.target.value
-                                    )
+                                    setDescription(event.target.value)
                                 }
                                 placeholder="Short category description..."
                                 rows={4}
@@ -459,22 +491,73 @@ const AdminCategories = () => {
                             />
                         </div>
 
+                        {/* Navbar settings */}
+                        <div className="space-y-4 rounded-lg border p-4">
+                            <div className="flex items-start gap-3">
+                                <Checkbox
+                                    id="category-show-in-navbar"
+                                    checked={showInNavbar}
+                                    onCheckedChange={(checked) =>
+                                        setShowInNavbar(checked === true)
+                                    }
+                                    disabled={saving}
+                                />
+
+                                <div className="space-y-1">
+                                    <label
+                                        htmlFor="category-show-in-navbar"
+                                        className="text-sm font-medium"
+                                    >
+                                        Show in navbar
+                                    </label>
+
+                                    <p className="text-sm text-muted-foreground">
+                                        Display this category in the desktop
+                                        and mobile navigation menus.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label
+                                    htmlFor="category-navbar-order"
+                                    className="text-sm font-medium"
+                                >
+                                    Navbar order
+                                </label>
+
+                                <Input
+                                    id="category-navbar-order"
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={navbarOrder}
+                                    onChange={(event) =>
+                                        setNavbarOrder(event.target.value)
+                                    }
+                                    disabled={saving || !showInNavbar}
+                                />
+
+                                <p className="text-xs text-muted-foreground">
+                                    Lower numbers appear first. Categories
+                                    with the same order are sorted
+                                    alphabetically.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
                         <DialogFooter>
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() =>
-                                    setDialogOpen(false)
-                                }
+                                onClick={() => setDialogOpen(false)}
                                 disabled={saving}
                             >
                                 Cancel
                             </Button>
 
-                            <Button
-                                type="submit"
-                                disabled={saving}
-                            >
+                            <Button type="submit" disabled={saving}>
                                 {saving ? (
                                     <>
                                         <HugeiconsIcon
@@ -482,7 +565,6 @@ const AdminCategories = () => {
                                             size={17}
                                             className="animate-spin"
                                         />
-
                                         Saving...
                                     </>
                                 ) : editingCategory ? (
@@ -496,12 +578,16 @@ const AdminCategories = () => {
                 </DialogContent>
             </Dialog>
 
-            {/* Delete dialog */}
+            {/* Delete confirmation dialog */}
             <Dialog
                 open={deleteDialogOpen}
                 onOpenChange={(open) => {
                     if (!deleting) {
                         setDeleteDialogOpen(open);
+
+                        if (!open) {
+                            setCategoryToDelete(null);
+                        }
                     }
                 }}
             >
@@ -513,22 +599,17 @@ const AdminCategories = () => {
 
                         <DialogDescription>
                             Are you sure you want to delete{" "}
-                            <strong>
-                                {categoryToDelete?.name}
-                            </strong>
-                            ?
+                            <strong>{categoryToDelete?.name}</strong>?
                             <br />
-                            Products currently using this category
-                            will keep their existing category name.
+                            Products currently using this category will keep
+                            their existing category name.
                         </DialogDescription>
                     </DialogHeader>
 
                     <DialogFooter>
                         <Button
                             variant="outline"
-                            onClick={() =>
-                                setDeleteDialogOpen(false)
-                            }
+                            onClick={() => setDeleteDialogOpen(false)}
                             disabled={deleting}
                         >
                             Cancel
@@ -546,7 +627,6 @@ const AdminCategories = () => {
                                         size={17}
                                         className="animate-spin"
                                     />
-
                                     Deleting...
                                 </>
                             ) : (
