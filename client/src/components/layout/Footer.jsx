@@ -1,8 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageContainer from "./PageContainer";
+import { getCategories } from "@/services/categoryApi";
+
+const categoryToSlug = (name = "") =>
+    name
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+const getCategoryUrl = (category) =>
+    `/shop?category=${encodeURIComponent(
+        category.slug || categoryToSlug(category.name)
+    )}`;
 
 const Footer = () => {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await getCategories();
+
+                const data = Array.isArray(response)
+                    ? response
+                    : response?.categories ||
+                    response?.data?.categories ||
+                    response?.data ||
+                    [];
+
+                const categoryList = Array.isArray(data) ? data : [];
+
+                setCategories(
+                    categoryList
+                        .filter((category) => category?.name)
+                        .sort((a, b) =>
+                            a.name.localeCompare(b.name)
+                        )
+                        .slice(0, 3)
+                );
+            } catch (error) {
+                console.error("Failed to fetch footer categories:", error);
+                setCategories([]);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
     return (
         <footer className="mt-16 border-t bg-muted/30">
             <PageContainer>
@@ -17,8 +64,8 @@ const Footer = () => {
                         </Link>
 
                         <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
-                            Discover quality products at great prices. Shop easily,
-                            securely, and confidently.
+                            Discover quality products at great prices. Shop
+                            easily, securely, and confidently.
                         </p>
                     </div>
 
@@ -34,19 +81,15 @@ const Footer = () => {
                                 All Products
                             </Link>
 
-                            <Link
-                                to="/shop?category=electronics"
-                                className="text-sm text-muted-foreground hover:text-foreground"
-                            >
-                                Electronics
-                            </Link>
-
-                            <Link
-                                to="/shop?category=clothing"
-                                className="text-sm text-muted-foreground hover:text-foreground"
-                            >
-                                Clothing
-                            </Link>
+                            {categories.map((category) => (
+                                <Link
+                                    key={category._id || category.id || category.name}
+                                    to={getCategoryUrl(category)}
+                                    className="text-sm text-muted-foreground hover:text-foreground"
+                                >
+                                    {category.name}
+                                </Link>
+                            ))}
 
                             <Link
                                 to="/shop?sort=featured"
@@ -129,7 +172,10 @@ const Footer = () => {
                 </div>
 
                 <div className="flex flex-col gap-3 border-t py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-                    <p>© {new Date().getFullYear()} UrbanNest. All rights reserved.</p>
+                    <p>
+                        © {new Date().getFullYear()} UrbanNest. All rights
+                        reserved.
+                    </p>
 
                     <p>Built with React & shadcn/ui</p>
                 </div>

@@ -114,26 +114,18 @@ const Home = () => {
         error: categoriesError,
     } = useCategories();
 
-    // Use backend categories when available.
-    // Otherwise use fallback categories.
     const displayedCategories =
         !categoriesLoading && categories.length > 0
             ? categories
             : FALLBACK_CATEGORIES;
 
-    // -----------------------------------------
-    // Products
-    // -----------------------------------------
-
+  
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [latestProducts, setLatestProducts] = useState([]);
 
     const [productsLoading, setProductsLoading] = useState(true);
     const [productsError, setProductsError] = useState("");
 
-    // -----------------------------------------
-    // Load real products
-    // -----------------------------------------
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -185,9 +177,6 @@ const Home = () => {
         loadProducts();
     }, []);
 
-    // -----------------------------------------
-    // Product fallback logic
-    // -----------------------------------------
 
     const realLatestProducts = latestProducts;
 
@@ -214,19 +203,12 @@ const Home = () => {
 
     return (
         <div>
-            {/* ================================================== */}
-            {/* HERO / OFFERS */}
-            {/* ================================================== */}
 
             <section className="relative overflow-hidden bg-muted/40">
                 <PageContainer>
                     <HomeOfferBanner />
                 </PageContainer>
             </section>
-
-            {/* ================================================== */}
-            {/* CATEGORIES */}
-            {/* ================================================== */}
 
             <section className="py-16 sm:py-20">
                 <PageContainer>
@@ -272,7 +254,7 @@ const Home = () => {
                                         className="group"
                                     >
                                         <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                            <div className="flex aspect-[4/5] items-center justify-center bg-muted">
+                                            <div className="flex aspect-[5/3] items-center justify-center bg-muted">
                                                 <HugeiconsIcon
                                                     icon={Tag01Icon}
                                                     size={48}
@@ -302,9 +284,6 @@ const Home = () => {
                 </PageContainer>
             </section>
 
-            {/* ================================================== */}
-            {/* FEATURED PRODUCTS */}
-            {/* ================================================== */}
 
             <section className="bg-muted/30 py-16 sm:py-20">
                 <PageContainer>
@@ -512,10 +491,6 @@ const Home = () => {
     );
 };
 
-/* ================================================== */
-/* SECTION HEADING */
-/* ================================================== */
-
 const SectionHeading = ({
     eyebrow,
     title,
@@ -552,9 +527,6 @@ const SectionHeading = ({
     );
 };
 
-/* ================================================== */
-/* PRODUCT LOADING */
-/* ================================================== */
 
 const ProductLoading = () => {
     return (
@@ -569,9 +541,6 @@ const ProductLoading = () => {
     );
 };
 
-/* ================================================== */
-/* FEATURE */
-/* ================================================== */
 
 const Feature = ({
     icon,

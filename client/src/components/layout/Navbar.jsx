@@ -160,21 +160,13 @@ const Navbar = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden items-center gap-5 lg:flex">
-                        <Link
-                            to="/"
-                            className={`text - sm font - medium transition - colors ${isActive("/")
-                                    ? "text-foreground"
-                                    : "text-muted-foreground hover:text-foreground"
-                                } `}
-                        >
-                            Home
-                        </Link>
+
 
                         <Link
                             to="/shop"
                             className={`text - sm font - medium transition - colors ${isActive("/shop")
-                                    ? "text-foreground"
-                                    : "text-muted-foreground hover:text-foreground"
+                                ? "text-foreground"
+                                : "text-muted-foreground hover:text-foreground"
                                 } `}
                         >
                             Shop
@@ -185,8 +177,8 @@ const Navbar = () => {
                                 key={category._id}
                                 to={getCategoryUrl(category)}
                                 className={`whitespace - nowrap text - sm font - medium transition - colors ${isCategoryActive(category)
-                                        ? "text-foreground"
-                                        : "text-muted-foreground hover:text-foreground"
+                                    ? "text-foreground"
+                                    : "text-muted-foreground hover:text-foreground"
                                     } `}
                             >
                                 {category.name}
