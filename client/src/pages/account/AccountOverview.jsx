@@ -92,9 +92,9 @@ const AccountOverview = () => {
                         <Button
                             asChild
                             variant="link"
-                            className="mt-3 h-auto px-0"
+                            className="mt-3 h-auto px-0 border-none"
                         >
-                            <Link to="/orders">
+                            <Link to="/orders" className="flex gap-1">
                                 View orders
                                 <HugeiconsIcon
                                     icon={ArrowRight01Icon}
@@ -134,9 +134,9 @@ const AccountOverview = () => {
                         <Button
                             asChild
                             variant="link"
-                            className="mt-3 h-auto px-0"
+                            className="mt-3 h-auto px-0  border-none"
                         >
-                            <Link to="/account/profile">
+                            <Link to="/account/profile" className="flex gap-1">
                                 Edit profile
                                 <HugeiconsIcon
                                     icon={ArrowRight01Icon}
